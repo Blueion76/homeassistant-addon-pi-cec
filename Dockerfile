@@ -1,5 +1,5 @@
 ARG BUILD_FROM
-ARG PYTHON_VERSION=3.10
+ARG PYTHON_VERSION=3.9
 ARG LIBCEC6_VERSION=6.0.2
 
 FROM $BUILD_FROM AS builder
@@ -26,8 +26,8 @@ WORKDIR /usr/src/libcec/build
 RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr \
     -DRPI_INCLUDE_DIR=/opt/vc/include \
     -DRPI_LIB_DIR=/opt/vc/lib \
-    -DPYTHON_LIBRARY="/usr/lib/libpython$PYTHON_VERSION.so" \
-    -DPYTHON_INCLUDE_DIR="/usr/include/python$PYTHON_VERSION" \
+    -DPYTHON_LIBRARY="/usr/lib/libpython3.9.so" \
+    -DPYTHON_INCLUDE_DIR="/usr/include/python3.9" \
     -GNinja ..
 RUN ninja install
 
@@ -36,9 +36,9 @@ ARG PYTHON_VERSION
 ARG LIBCEC6_VERSION
 RUN apk add --no-cache raspberrypi python3 p8-platform py3-pip eudev-libs
 RUN echo /lib:/usr/local/lib:/usr/lib:/opt/vc/lib > /etc/ld-musl-armhf.path
-RUN echo cec > "/usr/lib/python$PYTHON_VERSION/site-packages/cec.pth"
-COPY --from=builder /usr/lib/python$PYTHON_VERSION/site-packages/cec.py /usr/lib/python$PYTHON_VERSION/site-packages/
-COPY --from=builder /usr/lib/python$PYTHON_VERSION/site-packages/_cec.so /usr/lib/python$PYTHON_VERSION/site-packages/
+RUN echo cec > "/usr/lib/python3.9/site-packages/cec.pth"
+COPY --from=builder /usr/lib/python3.9/site-packages/cec.py /usr/lib/python3.9/site-packages/
+COPY --from=builder /usr/lib/python3.9/site-packages/_cec.so /usr/lib/python3.9/site-packages/
 COPY --from=builder /usr/lib/libcec.so.$LIBCEC6_VERSION /usr/lib/
 RUN ln -s libcec.so.$LIBCEC6_VERSION /usr/lib/libcec.so.6
 RUN ln -s libcec.so.6
