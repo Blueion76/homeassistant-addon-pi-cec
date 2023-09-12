@@ -36,9 +36,9 @@ ARG PYTHON_VERSION
 ARG LIBCEC6_VERSION
 RUN apk add --no-cache raspberrypi python3 p8-platform py3-pip eudev-libs
 RUN echo /lib:/usr/local/lib:/usr/lib:/opt/vc/lib > /etc/ld-musl-armhf.path
-RUN echo cec > "/usr/lib/python3.9/site-packages/cec.pth"
-COPY --from=builder /usr/lib/python3.9/site-packages/cec.py /usr/lib/python3.9/site-packages/
-COPY --from=builder /usr/lib/python3.9/site-packages/_cec.so /usr/lib/python3.9/site-packages/
+RUN echo cec > "~/.local/lib/python3.9/site-packages/cec.pth"
+COPY --from=builder ~/.local/lib/python3.9/site-packages/cec.py ~/.local/lib/python3.9/site-packages/
+COPY --from=builder ~/.local/lib/python3.9/site-packages/_cec.so ~/.local/lib/python3.9/site-packages/
 COPY --from=builder /usr/lib/libcec.so.$LIBCEC6_VERSION /usr/lib/
 RUN ln -s libcec.so.$LIBCEC6_VERSION /usr/lib/libcec.so.6
 RUN ln -s libcec.so.6
